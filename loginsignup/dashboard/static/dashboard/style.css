@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900&display=swap');
+
+    body {
+      overflow: hidden;
+      height: 100vh;
+      background: #FFFFFF;
+      font-family: 'Poppins', sans-serif;
+      animation: gradientShift 10s ease infinite;
+      transition: opacity 0.5s ease;
+      background-size: 800% 800%;
+    }
+    body.fade-out { opacity: 0; }
+
+    @keyframes gradientShift { 
+      0% { background-position: 0% 50%; } 
+      50% { background-position: 100% 50%; } 
+      100% { background-position: 0% 50%; } 
+    }
+
+    .sidebar {
+      height: 100vh;
+      background-color: #84ddfd;
+      color: white;
+      padding: 20px;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 10px 15px;
+      margin: 5px 0;
+      border-radius: 4px;
+      transition:all 0.3s ease; 
+      
+      margin:10px 0; width:100%; 
+    }
+    .sidebar a:hover {
+      background-color:#f75a89; 
+      color:#FFFFFF; 
+      box-shadow:0 5px 15px rgba(255,143,177,0.4),0 0 25px #FF4C82,0 0 50px #FF8FB1; 
+      transform:translateY(-3px) scale(1.05);
+    }
+    .navbar-pink {
+      background-color: white;
+      color: white;
+    }
+    .btn-pink {
+      background-color:#FF8FB1; 
+      color:white; 
+      font-weight:600; 
+      padding:12px 28px; 
+      border-radius:50px; 
+      border:none; 
+      transition:all 0.3s ease; 
+      box-shadow:0 5px 15px rgba(255,143,177,0.4); 
+      margin:10px 0; width:100%; 
+    }
+    .btn-pink:hover {
+      background-color:#FF4C82; 
+      color:#FFFFFF; 
+      box-shadow:0 0 25px #FF4C82,0 0 50px #FF8FB1; 
+      transform:translateY(-3px) scale(1.05);
+    }
+    .card-pink {
+      background-color: #f8f5f6;
+      color: #880e4f;
+    }

@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <title>FocusLoop - Teacher Registration</title>
+
+  <style>
+    body {
+      background-color: #ffe6f2; /* soft pink background */
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      border: none;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: #fff;
+      width: 100%;
+      max-width: 400px;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      border: 1px solid #f48fb1;
+    }
+
+    h3 {
+      font-weight: 600;
+      color: #d81b60;
+    }
+
+    p {
+      color: #7a7a7a;
+    }
+
+    .btn-custom {
+      background-color: #FF8FB1;
+      color: white;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 50px;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255, 143, 177, 0.4);
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .btn-custom:hover {
+      background-color: #FF4C82;
+      color: #FFFFFF;
+      box-shadow: 0 0 25px #FF4C82, 0 0 50px #FF8FB1;
+      transform: translateY(-3px) scale(1.05);
+    }
+  </style>
+
+
+  <div class="card">
+    <h3>Teacher Registration</h3>
+    <p>Please enter your information to continue</p>
+
+    <form method = "POST">
+      {% csrf_token %}
+      <div class="mb-3 text-start">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="teacher_name" placeholder="Enter your full name" required>
+      </div>
+
+      <!--<div class="mb-3 text-start">
+        <label class="form-label">department</label>
+        <input type="text" class="form-control" placeholder="e.g., Mathematics, Science" required>
+      </div>-->
+
+      <div class="mb-3 text-start">
+        <label class="form-label">Your subject</label>
+        <input type="text" class="form-control" name = "your_subject" placeholder="Enter your Subject" required>
+      </div>
+
+      <div class="mb-4 text-start">
+        <label class="form-label">Class Assigned</label>
+        <input type="text" name = "class_assigned" class="form-control" placeholder="e.g., 10th Grade" required>
+      </div>
+      <button type="submit" class="btn btn-custom">Save Information</button>
+    </form>
+  </div>
+
+{% endblock content %}
