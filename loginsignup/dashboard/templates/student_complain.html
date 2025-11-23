@@ -100,7 +100,6 @@
 
     }
 
-
     .leave-form {
         margin: auto;
         padding: 20px;
@@ -120,14 +119,15 @@
         <!--Nav bar no Hajimari-->
         <nav class="navbar navbar-pink mb-4 rounded">
             <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1 text-white">Student Dashboard</span>
-                <a href="#">Profile</a>
-                <a href="home.html">Home</a>
-                <a href="student_leave.html">Leave Applications</a>
+               
+                <a href="#" style="font-weight: bold;">Student : {{student.student_name}}</a>
+                <a href="{% url 'dashboard:student_home.html %}">Home</a>
+                <a href="{% url 'dashboard:student_leave' %}">Leave Applications</a>
 
-                <form method="POST" action="{% url 'logout' %}"></form>
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Logout</button>
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
             </div>
         </nav>
         <!--Nav Bar no Owari-->
@@ -154,7 +154,7 @@
 
                         <div class="mb-3 text-start">
                             <label class="form-label">Category</label>
-                            <input type="text" class="form-control" name="Complaint_Category"
+                            <input type="text" class="form-control" name="complaint_category"
                                 placeholder="e.g: Academic" required>
                         </div>
 
@@ -166,11 +166,11 @@
 
                         <div class="mb-4 text-start justify-content-center">
                             <label style=" font-weight: bold; "> Submit Anonymous Complaint?</label>
-                            <p style ="font-size:16px"> Your Identity will not be revealed!</p>
-                            <section class="form-check form-switch" aria-atomic = "false" aria-live = "polite">
+                            <p style="font-size:16px"> Your Identity will not be revealed!</p>
+                            <section class="form-check form-switch" aria-atomic="false" aria-live="polite">
                                 <input class="form-check-input bg-success" type="checkbox" role="switch"
-                                    id="switchGreen" aria-checked="false" data-state="off">
-                                
+                                    id="switchGreen" aria-checked="false" data-state="off" name = "anonymous">
+
                             </section>
 
                         </div>
@@ -198,12 +198,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for leave in leave_applications %}
+                                {% for complaint in complaints %}
                                 <tr>
-                                    <td>{{ leave.leave_type }}</td>
-                                    <td>{{ leave.start_date }}</td>
-                                    <td>{{ leave.end_date }}</td>
-                                    <td>{{ leave.status }}</td>
+                                    <td>{{ complaint.complaint_title }}</td>
+                                    <td>{{ complaint.complaint_category }}</td>
+                                    <td>{{ comaplaint.comaplaint_detail}}</td>
+                                    <td>{{ complaint.status }}</td>
                                 </tr>
 
                                 {% empty %}

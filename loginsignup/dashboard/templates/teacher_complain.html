@@ -109,9 +109,9 @@
 
     }
 
-    .card{
-        padding:20px;
-        margin:25px;
+    .card {
+        padding: 20px;
+        margin: 25px;
     }
 </style>
 
@@ -121,13 +121,14 @@
         <nav class="navbar navbar-pink mb-4 rounded">
             <div class="container-fluid">
                 <!--<span class="navbar-brand mb-0 h1 text-white"></span>-->
-                <a href="#">Profile</a>
-                <a href="teacher_home.html">Home</a>
-                <a href="teacher_leave.html">Leave Applications</a>
+                <a href="#">Teacher: {{teacher.teacher_name}}</a>
+                <a href="{% url 'dashboard: teacher_home' %}">Home</a>
+                <a href="{% url 'dashboard: teacher_leave' %}">Leave Applications</a>
 
-                <form method="POST" action="{% url 'logout' %}"></form>
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Logout</button>
+                <form method="POST" action="{% url 'base:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Logout</button>
+                </form>
             </div>
         </nav>
         <!--Nav Bar no Owari-->
@@ -149,16 +150,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for leave in leave_applications %}
+                            {% for complaint in complaints %}
                             <tr>
-                                <td>{{ leave.leave_type }}</td>
-                                <td>{{ leave.start_date }}</td>
-                                <td>{{ leave.end_date }}</td>
-                                <td>{{ leave.status }}</td>
-                                <td> <button type="submit" class="btn btn-info text-white">In Progress</button> </td>
-                                <td> <button type="submit" class="btn btn-success">Resolved</button></td>
+                                <td>{{ complaint.complaint_title }}</td>
+                                <td>{{ complaint.complaint_category }}</td>
+                                <td>{{ comaplaint.comaplaint_detail}}</td>
+                                <td>{{ complaint.status }}</td>
+
+
+                                <form method="POST"
+                                    action="{% url 'dashboard:teacher_update_complaint' complaint.id %}">
+                                    {% csrf_token %}
+                                    <td> <button type="submit" name="status" value="In Progress"
+                                            class="btn btn-info text-white">In Progress</button> </td>
+                                    <td> <button type="submit" name="status" value="Resolved"
+                                            class="btn btn-success">Resolved</button></td>
+                                </form>
                             </tr>
-                            
+
                             {% empty %}
                             <tr>
                                 <td colspan="5">No Complaints found.</td>
@@ -171,3 +180,6 @@
 
             <!--Main part no Owari-->
         </div>
+    </div>
+</div>
+{% endblock %}

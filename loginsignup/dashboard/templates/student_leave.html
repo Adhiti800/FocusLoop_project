@@ -101,7 +101,7 @@
         width: 95%;
         margin: 10px 10px;
         border-bottom: #8236de 2px solid;
-    
+
     }
 
     .form-control:focus {
@@ -123,9 +123,10 @@
         border: #8236de 2px solid;
 
     }
-    .card{
-        padding:20px;
-        margin:25px;
+
+    .card {
+        padding: 20px;
+        margin: 25px;
     }
 </style>
 
@@ -136,10 +137,10 @@
         <nav class="navbar navbar-pink mb-4 rounded">
             <div class="container-fluid">
                 <!--<span class="navbar-brand mb-0 h1 text-white">Student Dashboard</span>-->
-                <a href="#">Profile</a>
-                <a href="home.html">Home</a>
-                <a href="#">Complaint Box</a>
-                <form method="POST" action="{% url 'logout' %}">
+                <a href="#">Student: {{student.student_name}}</a>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'student_complaint' %}">Complaint Box</a>
+                <form method="POST" action="{% url 'base:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Logout</button>
                 </form>
@@ -177,7 +178,8 @@
 
                         <div class="mb-4 text-start">
                             <label class="form-label">Reason</label>
-                            <textarea id="reason" name="reason" rows="6" cols="50" class="form-control" placeholder="Enter your Reason here!"></textarea>
+                            <textarea id="reason" name="reason" rows="6" cols="50" class="form-control"
+                                placeholder="Enter your Reason here!"></textarea>
                         </div>
                         <button type="submit" class="btn btn-pink">Submit Leave Request</button>
                     </form>
@@ -189,9 +191,9 @@
             <div class="col-md-8 mb-3">
                 <div class="card p-4  overflow-x-auto">
 
-                   <h3>Your Leave Applications</h3>
-                   <br>
-                    <table class="table" >
+                    <h3>Your Leave Applications</h3>
+                    <br>
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">Leave Type</th>
@@ -218,17 +220,18 @@
                         </tbody>
                     </table>
                 </div>
-   
 
 
 
-                </div>
+
             </div>
         </div>
     </div>
+</div>
 
 
-    <!--Main part no Owari-->
+<!--Main part no Owari-->
 
 </div>
 </div>
+{% endblock %}

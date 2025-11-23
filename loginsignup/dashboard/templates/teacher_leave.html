@@ -109,67 +109,57 @@
 
     }
 
-    .card{
-        padding:20px;
-        margin:25px;
+    .card {
+        padding: 20px;
+        margin: 25px;
     }
 </style>
+<!-- Logout button -->
+<form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
 
-<div class="d-flex">
-    <div class="flex-grow-1 p-4">
-        <!--Nav bar no Hajimari-->
-        <nav class="navbar navbar-pink mb-4 rounded">
-            <div class="container-fluid">
-                <!--<span class="navbar-brand mb-0 h1 text-white"></span>-->
-                <a href="#">Profile</a>
-                <a href="teacher_home.html">Home</a>
-                <a href="teacher_complain.html">Students' complaints</a>
+<!-- Leave applications table -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for leave in leave_applications %}
+        <tr>
+            <td>{{ leave.leave_type }}</td>
+            <td>{{ leave.start_date }}</td>
+            <td>{{ leave.end_date }}</td>
+            <td>{{ leave.reason }}</td>
+            <td>{{ leave.status }}</td>
+            <td>
+                <form method="POST" action="{% url 'dashboard:update_leave_status' leave.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="Rejected">
+                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                </form>
+                <form method="POST" action="{% url 'dashboard:update_leave_status' leave.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="Approved">
+                    <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No leave applications found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>  
+{% endblock %} 
 
-                <form method="POST" action="{% url 'logout' %}"></form>
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </div>
-        </nav>
-        <!--Nav Bar no Owari-->
-
-        <!--Main part no Hajimari-->
-        <h2 style="font-weight: bold;">Students' Leave Applications : section {{}}</h2>
-        <p> </p>
-
-        <div class="row mt-4 justify-content-center overflow-auto">
-            <div class="col-md-12 mb-3 ">
-                <div class="card">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Leave Type</th>
-                                <th scope="col">Start Date</th>
-                                <th scope="col">End Date</th>
-                                <th scope="col">Reason</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for leave in leave_applications %}
-                            <tr>
-                                <td>{{ leave.leave_type }}</td>
-                                <td>{{ leave.start_date }}</td>
-                                <td>{{ leave.end_date }}</td>
-                                <td>{{ leave.reason }}</td>
-                                <td>{{ leave.status }}</td>
-                                <td> <button type="submit" class="btn btn-danger">Reject</button> </td>
-                                <td> <button type="submit" class="btn btn-success">Accept</button></td>
-                            </tr>
-                            
-                            {% empty %}
-                            <tr>
-                                <td colspan="5">No leave applications found.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!--Main part no Owari-->
-        </div>

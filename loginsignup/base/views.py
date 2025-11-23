@@ -1,90 +1,113 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
-from .models import Teacher, Student
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login, logout
+from .models import Teacher, Students
+from django.contrib import messages
 
-
+# ===========================
+# Welcome Page
+# ===========================
 def welcome(request):
     if request.user.is_authenticated:
-        return redirect('dashboard:home')
+        return redirect('dashboard:home')  # unified dashboard router
     return render(request, 'welcome.html')
-    
-@login_required(login_url='login')
-def home(request):
-    return render(request, 'home.html', {})
 
-def signup_view(request):
+
+# ===========================
+# Student Signup
+# ===========================
+def student_signup_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Create student profile
+          
             login(request, user)
-            return redirect('base:login')
+            return redirect('base:student_info')  # student fills additional info
+        else:
+            print(form.errors)
+            messages.error(request, "Signup failed. Please fix the errores.")
     else:
         form = UserCreationForm()
-    return render(request, 'registration/signup.html', {"form": form})
+    return render(request, 'registration/student_signup.html', {"form": form})
 
-@login_required
-def teacher_info(request):
-    if request.method == "POST":
-        print(request.POST) 
-        teacher_name = request.POST.get("teacher_name")
-        #department = request.POST.get("department")
-        your_subject = request.POST.get("your_subject")
-        class_assigned = request.POST.get("class_assigned")
-        #class_code = request.POST.get("class_code")
-        # saves the data in database.
 
-        Teacher.objects.create(
-            user = request.user,
-            teacher_name = teacher_name,
-            your_subject = your_subject,
-            class_assigned = class_assigned,
+# ===========================
+# Teacher Signup
+# ===========================
+def teacher_signup_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Create teacher profile
 
-        )
-        return redirect("dashboard:home")
-    return render(request, "teacher_info.html")
+            login(request, user)
+            return redirect('base:teacher_info')  # student fills additional info
+        else:
+            print(form.errors)
+            messages.error(request, "Signup failed. Please fix the errores.")
+           
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/teacher_signup.html', {"form": form})
 
-@login_required
+
+# ===========================
+# Student Info
+# ===========================
+
 def student_info(request):
     if request.method == "POST":
-        print(request.POST)
-        student_name = request.POST.get("student_name")
-        roll_number = request.POST.get("roll_number")
-        student_class = request.POST.get("student_class")
-        section = request.POST.get("section")
-
-        Student.objects.create(
-            user = request.user,
-            student_name = student_name,
-            roll_number = roll_number,
-            student_class = student_class,
-            section = section,
+        Students.objects.create(
+            user=request.user,
+            student_name=request.POST.get("student_name"),
+            roll_number=request.POST.get("roll_number"),
+            student_class=request.POST.get("student_class"),
+            section=request.POST.get("section"),
         )
-        return redirect("dashboard: home")
+        return redirect("dashboard:student_home")
+    
     return render(request, "student_info.html")
 
 
+# ===========================
+# Teacher Info
+# ===========================
+
+def teacher_info(request):
+    if request.method == "POST":
+        Teacher.objects.create(
+            user=request.user,
+            teacher_name=request.POST.get("teacher_name"),
+            your_subject=request.POST.get("your_subject"),
+            class_assigned=request.POST.get("class_assigned"),
+        )
+        return redirect("dashboard:teacher_home")  # sends teacher to their dashboard
+    return render(request, "teacher_info.html")
+
+
+# ===========================
+# Login View
+# ===========================
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
-
         user = authenticate(request, username=username, password=password)
-
         if user is not None:
             login(request, user)
             return redirect("dashboard:home")
         else:
             return render(request, "login.html", {"error": "Invalid username or password"})
-        
-    return render(request, "base: login.html")
+    return render(request, "login.html")  # fixed template path
 
 
-#def logout_view(request):
-    #logout(request)
-    #return redirect('welcome.html')
-
+# ===========================
+# Logout View
+# ===========================
+def logout_view(request):
+    logout(request)
+    return redirect('welcome')
