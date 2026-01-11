@@ -68,21 +68,6 @@
         width: 100%;
     }
 
-
-
-    .btn-pink {
-        background-color: #FF8FB1;
-        color: white;
-        font-weight: 600;
-        padding: 12px 28px;
-        border-radius: 50px;
-        border: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 5px 15px rgba(255, 143, 177, 0.4);
-        margin: 10px 0;
-        width: 100%;
-    }
-
     .btn-pink:hover {
         background-color: #FF4C82;
         color: #FFFFFF;
@@ -132,14 +117,14 @@
 
 <div class="d-flex">
     <div class="flex-grow-1 p-4">
-
         <!--Nav bar no Hajimari-->
         <nav class="navbar navbar-pink mb-4 rounded">
             <div class="container-fluid">
-                <!--<span class="navbar-brand mb-0 h1 text-white">Student Dashboard</span>-->
-                <a href="#">Student: {{student.student_name}}</a>
-                <a href="{% url 'home' %}">Home</a>
-                <a href="{% url 'student_complaint' %}">Complaint Box</a>
+                <!--<span class="navbar-brand mb-0 h1 text-white"></span>-->
+                <a href="#">Teacher: {{teacher.teacher_name}}</a>
+                <a href="{% url 'dashboard: teacher_home' %}">Home</a>
+                <a href="{% url 'dashboard: teacher_leave' %}">Leave Applications</a>
+
                 <form method="POST" action="{% url 'base:logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Logout</button>
@@ -149,89 +134,52 @@
         <!--Nav Bar no Owari-->
 
         <!--Main part no Hajimari-->
-        <h2 style="font-weight: bold;"> Leave Records</h2>
-        <p> Submit and manage your Leave Applications
-        <p>
+        <h2 style="font-weight: bold;">Students' Problems : section {{}}</h2>
+        <p> </p>
 
-        <div class="row mt-4">
-            <div class="col-md-6 mb-3">
+        <div class="row mt-4 justify-content-center overflow-auto">
+            <div class="col-md-12 mb-3 ">
                 <div class="card">
-
-                    <!--Form no Hajimari-->
-                    <form method="POST" class="leave-form">
-                        {% csrf_token %}
-                        <div class="mb-3 text-start">
-                            <label class="form-label">Leave type</label>
-                            <input type="text" class="form-control" name="leave_type"
-                                placeholder="e.g: Sick leave, Emergency, etc" required>
-                        </div>
-
-                        <div class="mb-3 text-start">
-                            <label class="form-label">Start Date</label>
-                            <input type="date" class="form-control" name="start_date" placeholder="DD-MM-YY" required>
-                        </div>
-
-                        <div class="mb-3 text-start">
-                            <label class="form-label">End date</label>
-                            <input type="date" class="form-control" name="end_date" placeholder="DD-MM-YY">
-                        </div>
-
-                        <div class="mb-4 text-start">
-                            <label class="form-label">Reason</label>
-                            <textarea id="reason" name="reason" rows="6" cols="50" class="form-control"
-                                placeholder="Enter your Reason here!"></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-pink">Submit Leave Request</button>
-                    </form>
-                    <!--Form no Owari-->
-
-                </div>
-            </div>
-
-            <div class="col-md-8 mb-3">
-                <div class="card p-4  overflow-x-auto">
-
-                    <h3>Your Leave Applications</h3>
-                    <br>
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Leave Type</th>
-                                <th scope="col">Start Date</th>
-                                <th scope="col">End Date</th>
-                                <th scope="col">Reason</th>
+                                <th scope="col">Complaint Title</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for leave in leave_applications %}
+                            {% for complaint in complaints %}
                             <tr>
-                                <td>{{ leave.leave_type }}</td>
-                                <td>{{ leave.start_date }}</td>
-                                <td>{{ leave.end_date }}</td>
-                                <td>{{ leave.reason }}</td>
-                                <td>{{ leave.status }}</td>
+                                <td>{{ complaint.complaint_title }}</td>
+                                <td>{{ complaint.complaint_category }}</td>
+                                <td>{{ complaint.complaint_detail}}</td>
+                                <td>{{ complaint.status }}</td>
+
+
+                                <form method="POST"
+                                    action="{% url 'dashboard:teacher_update_complaint' complaint.id %}">
+                                    {% csrf_token %}
+                                    <td> <button type="submit" name="status" value="In Progress"
+                                            class="btn btn-info text-white">In Progress</button> </td>
+                                    <td> <button type="submit" name="status" value="Resolved"
+                                            class="btn btn-success">Resolved</button></td>
+                                </form>
                             </tr>
+
                             {% empty %}
                             <tr>
-                                <td colspan="5">No leave applications found.</td>
+                                <td colspan="5">No Complaints found.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
-
-
-
             </div>
+
+            <!--Main part no Owari-->
         </div>
     </div>
-</div>
-
-
-<!--Main part no Owari-->
-
-</div>
 </div>
 {% endblock %}

@@ -5,10 +5,8 @@ from base.models import Students, Teacher
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-class Students(models.Model):
-    # ... student fields
-    name = models.CharField(max_length=100, default = "")
-    # ...
+
+
 
 class LeaveRecord(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
@@ -22,7 +20,7 @@ class LeaveRecord(models.Model):
     sent_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.student.name} Leave from {self.start_date}"
+        return f"{self.student.student_name} Leave from {self.start_date}"
     
 class Student_complaints(models.Model):
     student = models.ForeignKey(Students, on_delete = models.SET_NULL, null = True, blank = True)
@@ -33,6 +31,8 @@ class Student_complaints(models.Model):
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
+    def __str__(self):
+        return f"{self.complaint_title} - {self.status}"
 
 class Complaint(models.Model):
     student = models.ForeignKey(Students, on_delete=models.CASCADE)
@@ -42,8 +42,7 @@ class Complaint(models.Model):
     status = models.CharField(max_length=20, default="Pending")  # Pending, In Progress, Resolved
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.title} - {self.status}"
+    
     
 @login_required
 def teacher_dashboard(request):

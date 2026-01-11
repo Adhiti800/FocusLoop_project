@@ -4,10 +4,12 @@ from .views import (
     welcome,
     teacher_info,
     student_info,
-    login_view,
-    logout_view,
     teacher_signup_view,
 )
+from django.contrib.auth import views as auth_views
+from django.urls import path
+from django.urls import path
+
 
 app_name = 'base'
 
@@ -17,7 +19,8 @@ urlpatterns = [
     path("signup_teach/", teacher_signup_view, name="teacher_signup"),
     path("teacher_info/", teacher_info, name="teacher_info"),
     path("student_info/", student_info, name="student_info"),
-    path("login/", login_view, name="login"),
-    path("logout/", logout_view, name="logout"),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
     path("accounts/", include("django.contrib.auth.urls")),  # Django auth URLs
+   
+
 ]

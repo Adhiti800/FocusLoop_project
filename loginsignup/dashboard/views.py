@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Complaint, LeaveRecord
+from base.models import Students
+from datetime import date
+from django.db.models import Q
+
 
 
 # ------------------------------
@@ -11,10 +15,10 @@ def dashboard_router(request):
     user = request.user
 
     if hasattr(user, 'teacher'):
-        return redirect('dashboard:teacher_home')
+        return redirect('dashboard/teacher_home')
 
     if hasattr(user, 'student'):
-        return redirect('dashboard:student_home')
+        return redirect('dashboard/student_home')
 
     return redirect('base:welcome')
 
@@ -45,7 +49,7 @@ def teacher_home_view(request):
     leave_count = LeaveRecord.objects.filter(student__student_class=teacher.class_assigned).count()
     complaint_count = Complaint.objects.all().count()  # Or filter by class/section
 
-    return render(request, "dashboard/teacher_home.html", {
+    return render(request, 'dashboard/teacher_home.html', {
         "teacher": teacher,
         "leave_count": leave_count,
         "complaint_count": complaint_count,
@@ -54,7 +58,7 @@ def teacher_home_view(request):
 # ------------------------------
 # Student complaints
 # ------------------------------
-
+@login_required(login_url='login')
 def student_complain_view(request):
     student = request.user.student
 
@@ -69,12 +73,12 @@ def student_complain_view(request):
             student=None if anonymous else student,
             title=complaint_title,
             category=complaint_category,
-            description=complaint_detail,
+            description=complaint_detail or '',
             status='Pending'
         )
-        return redirect('dashboard:student_complain')
+        return redirect('dashboard/student_complain')
 
-    complaints = Complaint.objects.filter(student=student).order_by("-created_at")
+    complaints = Complaint.objects.filter(Q(student=student) | Q(student=None)).order_by("-created_at")
     return render(request, 'dashboard/student_complain.html', {"student": student, "complaints": complaints})
 
 
@@ -99,7 +103,7 @@ def student_leave_view(request):
             reason=reason,
             status="Pending"
         )
-        return redirect('dashboard:student_leave')
+        return redirect('dashboard/student_leave')
 
     leave_applications = LeaveRecord.objects.filter(student=student).order_by("-created_at")
     return render(request, 'dashboard/student_leave.html', {"student": student, "leave_applications": leave_applications})
@@ -118,7 +122,7 @@ def update_complaint_status(request, complaint_id):
             complaint.status = new_status
             complaint.save()
 
-    return redirect('dashboard:teacher_home')
+    return redirect('dashboard/teacher_home')
 
 #------------------------------
 # Teacher: leave applications view
@@ -145,4 +149,4 @@ def update_leave_status(request, leave_id):
         if new_status in ["Approved", "Rejected"]:
             leave.status = new_status
             leave.save()
-    return redirect('dashboard:teacher_leave')
+    return redirect('dashboard/teacher_leave')

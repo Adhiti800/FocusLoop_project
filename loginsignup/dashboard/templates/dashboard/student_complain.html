@@ -119,9 +119,9 @@
         <!--Nav bar no Hajimari-->
         <nav class="navbar navbar-pink mb-4 rounded">
             <div class="container-fluid">
-               
+
                 <a href="#" style="font-weight: bold;">Student : {{student.student_name}}</a>
-                <a href="{% url 'dashboard:student_home.html %}">Home</a>
+                <a href="{% url 'dashboard:student_home' %}">Home</a>
                 <a href="{% url 'dashboard:student_leave' %}">Leave Applications</a>
 
                 <form method="POST" action="{% url 'logout' %}">
@@ -134,7 +134,7 @@
 
         <!--Main part no Hajimari-->
         <h2 style="font-weight: bold;"> Submit a Complaint</h2>
-        <p style="font-size: 18px;"> Feel free to share your problems! ;)
+        <p style="font-size: 18px;"> Feel free to share your problems! ;
         <p>
 
         <div class="row mt-4">
@@ -160,18 +160,18 @@
 
                         <div class="mb-4 text-start">
                             <label class="form-label">Description</label>
-                            <textarea id="reason" name="Complaint_detail" rows="6" cols="50" class="form-control"
-                                placeholder="Enter details here!"></textarea>
+                            <textarea id="complaint_detail" name="complaint_detail" rows="6" cols="50"
+                                class="form-control" placeholder="Enter your reason here!" required></textarea>
                         </div>
 
                         <div class="mb-4 text-start justify-content-center">
                             <label style=" font-weight: bold; "> Submit Anonymous Complaint?</label>
                             <p style="font-size:16px"> Your Identity will not be revealed!</p>
-                            <section class="form-check form-switch" aria-atomic="false" aria-live="polite">
-                                <input class="form-check-input bg-success" type="checkbox" role="switch"
-                                    id="switchGreen" aria-checked="false" data-state="off" name = "anonymous">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="anonymousSwitch" name="anonymous">
+                                <label class="form-check-label" for="anonymousSwitch">Submit anonymously</label>
+                            </div>
 
-                            </section>
 
                         </div>
                         <button type="submit" class="btn btn-pink">Submit Complaint</button>
@@ -200,9 +200,10 @@
                             <tbody>
                                 {% for complaint in complaints %}
                                 <tr>
+                                  
                                     <td>{{ complaint.complaint_title }}</td>
                                     <td>{{ complaint.complaint_category }}</td>
-                                    <td>{{ comaplaint.comaplaint_detail}}</td>
+                                    <td>{{ complaint.complaint_detail}}</td>
                                     <td>{{ complaint.status }}</td>
                                 </tr>
 
@@ -220,3 +221,4 @@
     </div>
     <!--Main part no Owari-->
 </div>
+{% endblock %}
