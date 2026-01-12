@@ -14,7 +14,7 @@ from .models import Profile
 # ===========================
 def welcome(request):
     if request.user.is_authenticated:
-        return redirect('dashboard:home')  # unified dashboard router
+        return redirect('dashboard/home')  # unified dashboard router
     return render(request, 'welcome.html')
 
 
@@ -32,7 +32,7 @@ def student_signup_view(request):
             return redirect('base:student_info')  # student fills additional info
         else:
             print(form.errors)
-            messages.error(request, "Signup failed. Please fix the errores.")
+            messages.error(request, "Signup failed. Please fix the errors.")
     else:
         form = UserCreationForm()
     return render(request, 'registration/student_signup.html', {"form": form})

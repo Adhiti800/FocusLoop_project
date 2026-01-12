@@ -4,6 +4,7 @@ from .models import Complaint, LeaveRecord
 from base.models import Students
 from datetime import date
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -11,16 +12,24 @@ from django.db.models import Q
 # Dashboard router: redirect based on role
 # ------------------------------
 
+@login_required
 def dashboard_router(request):
     user = request.user
 
-    if hasattr(user, 'teacher'):
-        return redirect('dashboard/teacher_home')
+    try:
+        user.teacher
+        return redirect('dashboard:teacher_home')
+    except ObjectDoesNotExist:
+        pass
 
-    if hasattr(user, 'student'):
-        return redirect('dashboard/student_home')
+    try:
+        user.student
+        return redirect('dashboard:student_home')
+    except ObjectDoesNotExist:
+        pass
 
     return redirect('base:welcome')
+
 
 
 # ------------------------------
@@ -76,7 +85,7 @@ def student_complain_view(request):
             description=complaint_detail or '',
             status='Pending'
         )
-        return redirect('dashboard/student_complain')
+        return redirect('dashboard:student_complain')
 
     complaints = Complaint.objects.filter(Q(student=student) | Q(student=None)).order_by("-created_at")
     return render(request, 'dashboard/student_complain.html', {"student": student, "complaints": complaints})
